@@ -8,22 +8,33 @@ class GoodRecord:
         self.price = price
 
     def __str__(self):
-        #return f"{self.name}, {self.date.year}.{self.date.month}.{self.date.day}, {self.price}"
         return f"{self.name}, {self.date}, {self.price}"
 
 
-records = []
-with open(Path(__file__).parent / 'data.txt') as data:
-    for record in data.readlines():
-        name, date, price = record.split(',')
+def read_last_month_records(data_file) -> list[GoodRecord]:
+    records = []
+    with open(data_file) as data:
+        for record in data.readlines():
+            name, date, price = record.split(',')
 
-        name = name.strip()
+            name = name.strip()
 
-        year, month, day = [int(a) for a in date.split('-')]
-        date = datetime.date(year, month, day)
+            year, month, day = [int(a) for a in date.split('-')]
+            date = datetime.date(year, month, day)
 
-        price = float(price)
+            price = float(price)
 
-        records.append(GoodRecord(name, date, price))
+            records.append(GoodRecord(name, date, price))
 
-for r in records: print(r)
+    # for the last year
+    last_year = max(records, key=lambda record: record.date.year).date.year
+    records = list(filter(lambda record: record.date.year == last_year, records))
+
+    # for the last month in the last year
+    last_month = max(records, key=lambda record: record.date.month).date.month
+    records = list(filter(lambda record: record.date.month == last_month, records))
+
+    return records
+
+
+for r in read_last_month_records(Path(__file__).parent / 'data.txt'): print(r)
