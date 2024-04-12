@@ -45,10 +45,24 @@ def group_by_name(records):
 
     return grouped
 
+def print_prices_changes(records: list[GoodRecord]):
+    for group in group_by_name(records):
+        name = group[0]
+        records = group[1]
+
+        records = sorted(records, key=lambda record: record.date.day)
+        price_difference = records[-1].price - records[0].price
+        print(f"For good '{name}' price is cnanged on {price_difference}")
+
 records = read_last_month_records(Path(__file__).parent / 'data.txt')
 # for r in records: print(r)
 
-for g in group_by_name(records):
-    print(g[0], ":")
-    for a in g[1]:
-        print("\t", a)
+# for g in group_by_name(records):
+#     print(g[0], ":")
+#     for a in g[1]:
+#         print("\t", a)
+#
+# print("*" * 20)
+
+
+print_prices_changes(records)
