@@ -55,14 +55,6 @@ def print_prices_changes(records: list[GoodRecord]):
         print(f"For good '{name}' price is cnanged on {price_difference}")
 
 records = read_last_month_records(Path(__file__).parent / 'data.txt')
-# for r in records: print(r)
-
-# for g in group_by_name(records):
-#     print(g[0], ":")
-#     for a in g[1]:
-#         print("\t", a)
-#
-# print("*" * 20)
 
 
 print_prices_changes(records)
