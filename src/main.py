@@ -1,5 +1,6 @@
 import datetime
 from pathlib import Path
+from itertools import groupby
 
 class GoodRecord:
     def __init__(self, name: str, date: datetime.date, price: float):
@@ -37,4 +38,17 @@ def read_last_month_records(data_file) -> list[GoodRecord]:
     return records
 
 
-for r in read_last_month_records(Path(__file__).parent / 'data.txt'): print(r)
+def group_by_name(records):
+    grouped = []
+    for k, g in groupby(records, key=lambda record: record.name):
+        grouped.append((k, list(g)))
+
+    return grouped
+
+records = read_last_month_records(Path(__file__).parent / 'data.txt')
+# for r in records: print(r)
+
+for g in group_by_name(records):
+    print(g[0], ":")
+    for a in g[1]:
+        print("\t", a)
